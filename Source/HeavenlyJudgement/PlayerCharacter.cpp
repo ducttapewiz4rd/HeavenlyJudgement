@@ -22,6 +22,8 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
 	{
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Move);
+		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Look);
+
 	}
 }
 
@@ -44,6 +46,13 @@ void APlayerCharacter::Move(const FInputActionValue& Value)
 	const float CurrentValue = Value.Get<float>();
 	
 	FVector Forward = GetActorForwardVector();
-	AddMovementInput(Forward, CurrentValue);
+	AddMovementInput(FVector(Camera->GetForwardVector().X, Camera->GetForwardVector().Y, 0).GetSafeNormal(), CurrentValue);
 	
+}
+
+void APlayerCharacter::Look(const FInputActionValue& Value)
+{
+	const FVector2D CurrentValue = Value.Get<FVector2D>();
+	AddControllerYawInput(CurrentValue.X);
+	AddControllerPitchInput(CurrentValue.Y);
 }

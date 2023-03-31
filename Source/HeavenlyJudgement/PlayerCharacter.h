@@ -27,8 +27,11 @@ protected:
 	class UInputMappingContext* MappingContext;
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	class UInputAction* MoveAction;
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	class UInputAction* LookAction;
 
 	void Move(const FInputActionValue& Value);
+	void Look(const FInputActionValue& Value);
 
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "Player")
