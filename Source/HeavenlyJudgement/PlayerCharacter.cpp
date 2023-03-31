@@ -43,10 +43,10 @@ void APlayerCharacter::BeginPlay()
 
 void APlayerCharacter::Move(const FInputActionValue& Value)
 {
-	const float CurrentValue = Value.Get<float>();
+	const FVector2D CurrentValue = Value.Get<FVector2D>();
 	
-	FVector Forward = GetActorForwardVector();
-	AddMovementInput(FVector(Camera->GetForwardVector().X, Camera->GetForwardVector().Y, 0).GetSafeNormal(), CurrentValue);
+	AddMovementInput(FVector(Camera->GetForwardVector().X, Camera->GetForwardVector().Y, 0).GetSafeNormal(), CurrentValue.Y);
+	AddMovementInput(Camera->GetRightVector(), CurrentValue.X);
 	
 }
 
