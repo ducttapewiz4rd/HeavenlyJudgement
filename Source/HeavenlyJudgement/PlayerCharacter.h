@@ -40,4 +40,7 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Player")
 	class UCameraComponent* Camera;
 	
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
+	class ARevolver* Revolver;
+	
 };
