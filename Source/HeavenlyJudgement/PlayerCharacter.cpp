@@ -5,6 +5,8 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
+#include "HJAbilitySystemComponent.h"
+#include "Revolver.h"
 #include "Components/InputComponent.h"
 #include "Camera/CameraComponent.h"
 
@@ -23,13 +25,14 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	{
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Move);
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Look);
-
+		EnhancedInputComponent->BindAction(AbilityAction, ETriggerEvent::Triggered, this, &APlayerCharacter::HandleAbilityInput);
 	}
 }
 
 void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	SpawnWeapons();
 	
 	if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
 	{
@@ -55,4 +58,20 @@ void APlayerCharacter::Look(const FInputActionValue& Value)
 	const FVector2D CurrentValue = Value.Get<FVector2D>();
 	AddControllerYawInput(CurrentValue.X);
 	AddControllerPitchInput(CurrentValue.Y);
+}
+
+void APlayerCharacter::HandleAbilityInput(const FInputActionValue& InputActionValue)
+{
+	GetAbilitySystemComponent()->AbilityLocalInputPressed(InputActionValue.Get<float>());
+}
+
+void APlayerCharacter::SpawnWeapons()
+{
+
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.Owner = GetOwner();
+	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	Revolver = GetWorld()->SpawnActor<ARevolver>(RevolverClass, SpawnParams);
+	FAttachmentTransformRules AttachRules{ EAttachmentRule::SnapToTarget, EAttachmentRule::SnapToTarget, EAttachmentRule::KeepWorld, true };
+	Revolver->AttachToComponent(GetMesh(), AttachRules, Revolver->GetWeaponSocketName());
 }

@@ -14,6 +14,11 @@ class HEAVENLYJUDGEMENT_API ABaseWeapon : public AActor
 public:	
 	// Sets default values for this actor's properties
 	ABaseWeapon();
+	FName GetWeaponSocketName() const { return WeaponSocketName; }
+	USkeletalMeshComponent* GetWeaponMesh() const { return WeaponMesh; }
+
+
+
 
 protected:
 	// Called when the game starts or when spawned
@@ -26,5 +31,8 @@ public:
 private:
 UPROPERTY(EditDefaultsOnly, Category = "BaseWeapon")
 USkeletalMeshComponent* WeaponMesh;
+
+UPROPERTY(EditDefaultsOnly, Category = "BaseWeapon")
+FName WeaponSocketName;
 
 };

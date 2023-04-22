@@ -53,4 +53,6 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "GameplayAbility")
 	TArray <TSubclassOf<class UGameplayEffect>> InitialEffects;
 
+
+
 };

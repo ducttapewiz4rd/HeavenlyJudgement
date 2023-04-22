@@ -29,11 +29,17 @@ protected:
 	class UInputAction* MoveAction;
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	class UInputAction* LookAction;
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	class UInputAction* AbilityAction;
 
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
+	void HandleAbilityInput(const FInputActionValue& InputActionValue);
 
 private:
+
+	void SpawnWeapons();
+
 	UPROPERTY(EditDefaultsOnly, Category = "Player")
 	class USpringArmComponent* SpringArm;
 
@@ -41,6 +47,9 @@ private:
 	class UCameraComponent* Camera;
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
-	class ARevolver* Revolver;
+	TSubclassOf<class ARevolver> RevolverClass;
+
+	UPROPERTY()
+	ARevolver* Revolver;
 	
 };

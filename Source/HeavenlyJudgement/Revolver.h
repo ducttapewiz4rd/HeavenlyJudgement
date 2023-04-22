@@ -13,8 +13,12 @@ UCLASS()
 class HEAVENLYJUDGEMENT_API ARevolver : public ABaseWeapon
 {
 	GENERATED_BODY()
+
+public:
+	void GunTrace();
 	
 private:
+
 
 UPROPERTY(EditDefaultsOnly, Category = "Revolver")
 int CurrentAmmo;
@@ -24,5 +28,10 @@ int AmmoCapacity = 5;
 
 UPROPERTY(EditDefaultsOnly, Category = "Revolver")
 int AmmoReserved = 10;
+
+FHitResult HitResult;
+
+UPROPERTY(EditDefaultsOnly, Category = "Revolver")
+FName PistolMuzzleLocationSocketName {"RevolverMuzzle"};
 	
 };

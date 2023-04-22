@@ -14,6 +14,7 @@ ABaseWeapon::ABaseWeapon()
 
 }
 
+
 // Called when the game starts or when spawned
 void ABaseWeapon::BeginPlay()
 {
