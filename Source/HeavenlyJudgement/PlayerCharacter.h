@@ -22,6 +22,8 @@ public:
 
 	virtual void BeginPlay() override;
 
+	class ARevolver* GetRevolver() const { return Revolver; }
+
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	class UInputMappingContext* MappingContext;

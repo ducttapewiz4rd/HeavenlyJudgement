@@ -69,7 +69,7 @@ void APlayerCharacter::SpawnWeapons()
 {
 
 	FActorSpawnParameters SpawnParams;
-	SpawnParams.Owner = GetOwner();
+	SpawnParams.Owner = this;
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 	Revolver = GetWorld()->SpawnActor<ARevolver>(RevolverClass, SpawnParams);
 	FAttachmentTransformRules AttachRules{ EAttachmentRule::SnapToTarget, EAttachmentRule::SnapToTarget, EAttachmentRule::KeepWorld, true };

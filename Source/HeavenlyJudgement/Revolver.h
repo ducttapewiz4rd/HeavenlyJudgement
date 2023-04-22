@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "BaseWeapon.h"
+#include "GameplayEffectTypes.h"
 #include "Revolver.generated.h"
 
 /**
@@ -33,5 +34,8 @@ FHitResult HitResult;
 
 UPROPERTY(EditDefaultsOnly, Category = "Revolver")
 FName PistolMuzzleLocationSocketName {"RevolverMuzzle"};
+
+UPROPERTY(EditDefaultsOnly, Category = "Revolver")
+FGameplayTag HitEventTag;
 	
 };
