@@ -6,6 +6,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
 #include "HJAbilitySystemComponent.h"
+#include "LockOnCapturer.h"
 #include "Revolver.h"
 #include "Components/InputComponent.h"
 #include "Camera/CameraComponent.h"
@@ -26,6 +27,9 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Move);
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Look);
 		EnhancedInputComponent->BindAction(AbilityAction, ETriggerEvent::Triggered, this, &APlayerCharacter::HandleAbilityInput);
+		EnhancedInputComponent->BindAction(LockOnAction, ETriggerEvent::Triggered, this, &APlayerCharacter::LockOn);
+		EnhancedInputComponent->BindAction(ToggleLockOnAction, ETriggerEvent::Triggered, this, &APlayerCharacter::LockOnToggle);
+
 	}
 }
 
@@ -65,6 +69,40 @@ void APlayerCharacter::HandleAbilityInput(const FInputActionValue& InputActionVa
 	GetAbilitySystemComponent()->AbilityLocalInputPressed(InputActionValue.Get<float>());
 }
 
+void APlayerCharacter::LockOn()
+{
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	SpawnParams.Owner = this;
+	ALockOnCapturer* Capturer = GetWorld()->SpawnActor<ALockOnCapturer>(LockOnCapturerClass, GetActorTransform(), SpawnParams);
+	TArray<AActor*> PotentialTargets = Capturer->GetAllTargetsInRange();
+	if (PotentialTargets.Num() > 0)
+	{
+		float Distance = 0;
+		// if (LockedOnTarget)
+		// {
+		// 	UWidgetComponent* WidgetCpt = LockedOnTarget->FindComponentByClass<UWidgetComponent>();
+		// 	WidgetCpt->SetVisibility(false);
+		// }
+		LockedOnTarget = GetClosestTarget(PotentialTargets, Distance);
+
+
+		// UWidgetComponent* WidgetCpt = LockedOnTarget->FindComponentByClass<UWidgetComponent>();
+		// if (WidgetCpt)
+		// {
+		// 	WidgetCpt->SetVisibility(true);
+		// }
+	}
+	else
+	{
+		return;
+	}
+}
+
+void APlayerCharacter::LockOnToggle(const FInputActionValue& Value)
+{
+}
+
 void APlayerCharacter::SpawnWeapons()
 {
 
@@ -75,3 +113,22 @@ void APlayerCharacter::SpawnWeapons()
 	FAttachmentTransformRules AttachRules{ EAttachmentRule::SnapToTarget, EAttachmentRule::SnapToTarget, EAttachmentRule::KeepWorld, true };
 	Revolver->AttachToComponent(GetMesh(), AttachRules, Revolver->GetWeaponSocketName());
 }
+
+AActor* APlayerCharacter::GetClosestTarget(TArray<AActor*> Targets, float& Distance)
+{
+	AActor* ClosestTarget = nullptr;
+	float ClosestDistance = 1600;
+
+	for (AActor* Target : Targets)
+	{
+		float DistTo = Target->GetDistanceTo(this);
+		if (DistTo < ClosestDistance)
+		{
+			ClosestDistance = DistTo;
+			ClosestTarget = Target;
+		}
+	}
+	Distance = ClosestDistance;
+	return ClosestTarget;
+}
+

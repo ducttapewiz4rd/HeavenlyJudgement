@@ -33,10 +33,16 @@ protected:
 	class UInputAction* LookAction;
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	class UInputAction* AbilityAction;
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	class UInputAction* LockOnAction;
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	class UInputAction* ToggleLockOnAction;
 
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
 	void HandleAbilityInput(const FInputActionValue& InputActionValue);
+	void LockOn();
+	void LockOnToggle(const FInputActionValue& Value);
 
 private:
 
@@ -53,5 +59,16 @@ private:
 
 	UPROPERTY()
 	ARevolver* Revolver;
+
+	UPROPERTY(EditDefaultsOnly)
+	AActor* LockedOnTarget;
+
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<class ALockOnCapturer> LockOnCapturerClass;
+
+	UPROPERTY(EditDefaultsOnly)
+	float LockOnRange = 2500.f;
+
+	AActor* GetClosestTarget(TArray<AActor*> Targets, float& Distance);
 	
 };
