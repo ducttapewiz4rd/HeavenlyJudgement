@@ -22,6 +22,8 @@ public:
 
 	virtual void BeginPlay() override;
 
+	virtual void Tick(float DeltaTime) override;
+
 	class ARevolver* GetRevolver() const { return Revolver; }
 
 protected:
@@ -60,7 +62,7 @@ private:
 	UPROPERTY()
 	ARevolver* Revolver;
 
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(VisibleAnywhere)
 	AActor* LockedOnTarget;
 
 	UPROPERTY(EditDefaultsOnly)
@@ -70,5 +72,9 @@ private:
 	float LockOnRange = 2500.f;
 
 	AActor* GetClosestTarget(TArray<AActor*> Targets, float& Distance);
+	UPROPERTY()
+	class AHJPlayerController* PlayerCont;
+
+
 	
 };

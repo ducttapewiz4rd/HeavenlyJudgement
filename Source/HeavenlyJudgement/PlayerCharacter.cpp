@@ -6,6 +6,8 @@
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
 #include "HJAbilitySystemComponent.h"
+#include "Kismet/KismetMathLibrary.h"
+#include "HJPlayerController.h"
 #include "LockOnCapturer.h"
 #include "Revolver.h"
 #include "Components/InputComponent.h"
@@ -37,7 +39,7 @@ void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	SpawnWeapons();
-	
+	PlayerCont = Cast<AHJPlayerController>(GetOwner());
 	if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
 	{
 		UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer());
@@ -45,6 +47,16 @@ void APlayerCharacter::BeginPlay()
 		{
 			Subsystem->AddMappingContext(MappingContext, 0);
 		}
+	}
+}
+
+void APlayerCharacter::Tick(float DeltaTime)
+{
+	if (LockedOnTarget)
+	{
+		FRotator LookAtRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), LockedOnTarget->GetActorLocation());
+		FRotator InterpRot = FMath::RInterpTo(PlayerCont->GetControlRotation(), LookAtRotation, DeltaTime, 5.f);
+		PlayerCont->SetControlRotation(InterpRot);
 	}
 }
 
@@ -71,6 +83,16 @@ void APlayerCharacter::HandleAbilityInput(const FInputActionValue& InputActionVa
 
 void APlayerCharacter::LockOn()
 {
+
+	if (LockedOnTarget)
+	{
+		//UWidgetComponent* WidgetCpt = LockedOnTarget->FindComponentByClass<UWidgetComponent>();
+		//WidgetCpt->SetVisibility(false);
+		LockedOnTarget = nullptr;
+		return;
+	}
+
+
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 	SpawnParams.Owner = this;
@@ -101,6 +123,66 @@ void APlayerCharacter::LockOn()
 
 void APlayerCharacter::LockOnToggle(const FInputActionValue& Value)
 {
+
+	float ToggledAxis = Value.Get<float>();
+
+	if (LockedOnTarget)
+	{
+		FActorSpawnParameters SpawnParams;
+		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+		SpawnParams.Owner = this;
+		ALockOnCapturer* Capturer = GetWorld()->SpawnActor<ALockOnCapturer>(LockOnCapturerClass, GetActorTransform(), SpawnParams);
+		TArray<AActor*> PotentialTargets = Capturer->GetAllTargetsInRange();
+		AActor* BestEnemy = nullptr;
+		float BestDistance = FLT_MAX;
+
+		FVector2D CurrentTargetScreenLoc;
+
+		for (AActor* Enemy : PotentialTargets)
+		{
+			if (Enemy == LockedOnTarget)
+			{
+				continue;
+			}
+
+
+			FVector ToEnemy = Enemy->GetActorLocation() - LockedOnTarget->GetActorLocation();
+			FVector Right = Camera->GetRightVector();
+			float dot = FVector::DotProduct(ToEnemy.GetSafeNormal(), Right);
+			bool bothPos = dot > 0 && ToggledAxis > 0;
+			bool bothNeg = dot < 0 && ToggledAxis < 0;
+			if (dot * ToggledAxis > 0)
+			{
+
+				FVector CurrentTargetToEnemy = Enemy->GetActorLocation() - LockedOnTarget->GetActorLocation();
+				float CamViewDistance = FMath::Abs(FVector::DotProduct(CurrentTargetToEnemy, Right));
+
+				if (CamViewDistance < BestDistance)
+				{
+
+					BestEnemy = Enemy;
+					BestDistance = CamViewDistance;
+				}
+			}
+
+
+		}
+		if (BestEnemy != nullptr)
+		{
+
+			//if (LockedOnTarget)
+			//{
+			//	UWidgetComponent* WidgetCpt = LockedOnTarget->FindComponentByClass<UWidgetComponent>();
+			//	WidgetCpt->SetVisibility(false);
+			//}
+			LockedOnTarget = BestEnemy;
+			//UWidgetComponent* WidgetCpt = LockedOnTarget->FindComponentByClass<UWidgetComponent>();
+			//if (WidgetCpt)
+			//{
+			//	WidgetCpt->SetVisibility(true);
+			//}
+		}
+	}
 }
 
 void APlayerCharacter::SpawnWeapons()
@@ -131,4 +213,5 @@ AActor* APlayerCharacter::GetClosestTarget(TArray<AActor*> Targets, float& Dista
 	Distance = ClosestDistance;
 	return ClosestTarget;
 }
+
 
