@@ -17,6 +17,7 @@ class HEAVENLYJUDGEMENT_API ARevolver : public ABaseWeapon
 
 public:
 	void GunTrace();
+	void GunTraceTarget(AActor* PotentialTarget);
 	
 private:
 

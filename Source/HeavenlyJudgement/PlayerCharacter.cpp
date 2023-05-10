@@ -60,6 +60,16 @@ void APlayerCharacter::Tick(float DeltaTime)
 	}
 }
 
+bool APlayerCharacter::IsLockedOn(AActor*& LockedOnActor)
+{
+	if (LockedOnTarget)
+	{
+		LockedOnActor = LockedOnTarget;
+		return true;
+	}
+	return false;
+}
+
 void APlayerCharacter::Move(const FInputActionValue& Value)
 {
 	const FVector2D CurrentValue = Value.Get<FVector2D>();

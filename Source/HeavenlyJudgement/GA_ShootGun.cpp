@@ -6,6 +6,7 @@
 #include "Abilities/Tasks/AbilityTask_WaitGameplayEvent.h"
 #include "Abilities/Tasks/AbilityTask_WaitTargetData.h"
 #include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "AbilitySystemBlueprintLibrary.h"
 #include "Revolver.h"
 #include "PlayerCharacter.h"
@@ -17,7 +18,7 @@ void UGA_ShootGun::ActivateAbility(const FGameplayAbilitySpecHandle Handle, cons
 
 	UAbilityTask_PlayMontageAndWait* ShootMontageTask = UAbilityTask_PlayMontageAndWait::CreatePlayMontageAndWaitProxy(this, NAME_None, FiringMontage);
 	Revolver = Cast<APlayerCharacter>(GetAvatarAsCharacter())->GetRevolver();
-	
+	APlayerCharacter* Pam = Cast<APlayerCharacter>(GetAvatarAsCharacter());
 
 	if (ShootMontageTask)
 	{
@@ -28,6 +29,7 @@ void UGA_ShootGun::ActivateAbility(const FGameplayAbilitySpecHandle Handle, cons
 		ShootMontageTask->ReadyForActivation();
 	}
 
+
 	UAbilityTask_WaitGameplayEvent* WaitHit = UAbilityTask_WaitGameplayEvent::WaitGameplayEvent(this, HitEventTag, nullptr, false, false);
 	if (WaitHit)
 	{
@@ -35,7 +37,25 @@ void UGA_ShootGun::ActivateAbility(const FGameplayAbilitySpecHandle Handle, cons
 		WaitHit->ReadyForActivation();
 	}
 
-	Revolver->GunTrace();
+	AActor* Target;
+	if (Pam->IsLockedOn(Target))
+	{
+		if (Target)
+		{
+			FRotator LookAtRot = UKismetMathLibrary::FindLookAtRotation(Pam->GetActorLocation(), Target->GetActorLocation());
+			LookAtRot.Pitch = 0;
+			Pam->SetActorRotation(LookAtRot);
+			Revolver->GunTraceTarget(Target);
+
+		}
+	}
+	else
+	{
+		
+		Revolver->GunTrace();
+	}
+
+	
 
 
 }
@@ -54,7 +74,6 @@ void UGA_ShootGun::Hit(FGameplayEventData Payload)
 	for (AActor* TargetActor : TargetActors)
 	{
 
-		UE_LOG(LogTemp, Warning, TEXT("Ability recieved event data and we hit a target actor"));
 
 		/*	ACharacter* TargetAsCharacter = Cast<ACharacter>(TargetActor);
 			if (TargetAsCharacter)

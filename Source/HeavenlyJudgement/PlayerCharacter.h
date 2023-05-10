@@ -26,6 +26,8 @@ public:
 
 	class ARevolver* GetRevolver() const { return Revolver; }
 
+	bool IsLockedOn(AActor*& LockedOnActor);
+
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	class UInputMappingContext* MappingContext;
