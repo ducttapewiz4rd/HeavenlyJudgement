@@ -41,6 +41,8 @@ protected:
 	class UInputAction* LockOnAction;
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	class UInputAction* ToggleLockOnAction;
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	class UInputAction* JumpAction;
 
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);

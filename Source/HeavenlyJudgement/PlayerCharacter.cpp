@@ -31,7 +31,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		EnhancedInputComponent->BindAction(AbilityAction, ETriggerEvent::Triggered, this, &APlayerCharacter::HandleAbilityInput);
 		EnhancedInputComponent->BindAction(LockOnAction, ETriggerEvent::Triggered, this, &APlayerCharacter::LockOn);
 		EnhancedInputComponent->BindAction(ToggleLockOnAction, ETriggerEvent::Triggered, this, &APlayerCharacter::LockOnToggle);
-
+		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Jump);
 	}
 }
 
@@ -82,8 +82,18 @@ void APlayerCharacter::Move(const FInputActionValue& Value)
 void APlayerCharacter::Look(const FInputActionValue& Value)
 {
 	const FVector2D CurrentValue = Value.Get<FVector2D>();
-	AddControllerYawInput(CurrentValue.X);
-	AddControllerPitchInput(CurrentValue.Y);
+
+	if (LockedOnTarget)
+	{
+		AddControllerYawInput(0);
+		AddControllerPitchInput(0);
+	}
+	else
+	{
+		AddControllerYawInput(CurrentValue.X);
+		AddControllerPitchInput(CurrentValue.Y);
+	}
+
 }
 
 void APlayerCharacter::HandleAbilityInput(const FInputActionValue& InputActionValue)

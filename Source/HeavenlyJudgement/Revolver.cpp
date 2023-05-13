@@ -55,7 +55,6 @@ void ARevolver::GunTraceTarget(AActor* PotentialTarget)
 
 		if (HitResult.bBlockingHit)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Actor hit: %s"), *HitResult.GetActor()->GetName());
 			FGameplayEventData eventData;
 
 			FGameplayAbilityTargetDataHandle TargetData = UAbilitySystemBlueprintLibrary::AbilityTargetDataFromActor(HitResult.GetActor());
