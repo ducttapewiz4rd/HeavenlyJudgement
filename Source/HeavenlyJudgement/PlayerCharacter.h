@@ -43,12 +43,15 @@ protected:
 	class UInputAction* ToggleLockOnAction;
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	class UInputAction* JumpAction;
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	class UInputAction* InteractAction;
 
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
 	void HandleAbilityInput(const FInputActionValue& InputActionValue);
 	void LockOn();
 	void LockOnToggle(const FInputActionValue& Value);
+	void Interact();
 
 private:
 
@@ -71,6 +74,8 @@ private:
 
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<class ALockOnCapturer> LockOnCapturerClass;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<class AInteractSphere> InteractSphereClass;
 
 	UPROPERTY(EditDefaultsOnly)
 	float LockOnRange = 2500.f;

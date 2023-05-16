@@ -32,6 +32,8 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		EnhancedInputComponent->BindAction(LockOnAction, ETriggerEvent::Triggered, this, &APlayerCharacter::LockOn);
 		EnhancedInputComponent->BindAction(ToggleLockOnAction, ETriggerEvent::Triggered, this, &APlayerCharacter::LockOnToggle);
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Jump);
+		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Interact);
+
 	}
 }
 
@@ -203,6 +205,12 @@ void APlayerCharacter::LockOnToggle(const FInputActionValue& Value)
 			//}
 		}
 	}
+}
+
+void APlayerCharacter::Interact()
+{
+	//TODO, spawn interact sphere, if it has the interface use its function to do its stuff.
+	UE_LOG(LogTemp, Warning, TEXT("Interacting"));
 }
 
 void APlayerCharacter::SpawnWeapons()
