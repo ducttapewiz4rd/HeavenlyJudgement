@@ -14,8 +14,22 @@ class HEAVENLYJUDGEMENT_API AChest : public AInteractableActor
 {
 	GENERATED_BODY()
 
+public:
+	void SetContainedItem(TSubclassOf<class UBaseItem> Item);
+
+protected:
+	virtual void BeginPlay() override;
+
+	virtual void InteractWith(APlayerCharacter* Player) override;
+
 private:
-	
+	virtual void GiveSelfToGameMode();
+
+	UPROPERTY()
+	class AHeavenlyJudgementGameModeBase* GameMode;
+
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<UBaseItem> ContainedItem;
 
 	
 };

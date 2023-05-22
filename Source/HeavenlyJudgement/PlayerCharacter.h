@@ -28,6 +28,8 @@ public:
 
 	bool IsLockedOn(AActor*& LockedOnActor);
 
+	class UInventoryComponent* GetInventoryComponent() const { return InventoryComp; }
+
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	class UInputMappingContext* MappingContext;
@@ -56,6 +58,9 @@ protected:
 private:
 
 	void SpawnWeapons();
+
+	UPROPERTY(EditDefaultsOnly, Category = "Player")
+	class UInventoryComponent* InventoryComp;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Player")
 	class USpringArmComponent* SpringArm;

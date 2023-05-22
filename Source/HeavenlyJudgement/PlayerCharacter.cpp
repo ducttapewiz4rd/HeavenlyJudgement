@@ -6,12 +6,15 @@
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
 #include "HJAbilitySystemComponent.h"
+#include "InteractableInterface.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "HJPlayerController.h"
 #include "LockOnCapturer.h"
+#include "InteractSphere.h"
 #include "Revolver.h"
 #include "Components/InputComponent.h"
 #include "Camera/CameraComponent.h"
+#include "InventoryComponent.h"
 
 APlayerCharacter::APlayerCharacter()
 {
@@ -19,6 +22,7 @@ APlayerCharacter::APlayerCharacter()
 	SpringArm->SetupAttachment(RootComponent);
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(SpringArm);
+	InventoryComp = CreateDefaultSubobject<UInventoryComponent>(TEXT("Inventory Component"));
 }
 
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -211,6 +215,20 @@ void APlayerCharacter::Interact()
 {
 	//TODO, spawn interact sphere, if it has the interface use its function to do its stuff.
 	UE_LOG(LogTemp, Warning, TEXT("Interacting"));
+
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	SpawnParams.Owner = this;
+	AInteractSphere* Capturer = GetWorld()->SpawnActor<AInteractSphere>(InteractSphereClass, GetActorTransform(), SpawnParams);
+	TArray<AActor*> PotentialTargets = Capturer->GetAllTargetsInRange();
+	if (PotentialTargets.Num() > 0)
+	{
+		float distance = 0;
+		IInteractableInterface* interactInferface = Cast<IInteractableInterface>(GetClosestTarget(PotentialTargets, distance));
+		interactInferface->InteractWith(this);
+	}
+
+
 }
 
 void APlayerCharacter::SpawnWeapons()
