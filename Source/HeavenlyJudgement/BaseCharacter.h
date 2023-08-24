@@ -19,6 +19,8 @@ public:
 	// Sets default values for this character's properties
 	ABaseCharacter();
 
+	
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -27,6 +29,18 @@ protected:
 	void ApplyEffectToSelf(const TSubclassOf<class UGameplayEffect>& effectToApply, int level = -1);
 
 	FGameplayAbilitySpec* GiveAbility(const TSubclassOf<class UGameplayAbility>& newAbility, int inputID = -1, bool broadCast = true, int level = 0);
+
+	virtual void SendJumpEventsToActorAbility();
+
+	UPROPERTY(EditDefaultsOnly, Category = "GameplayAbility")
+	FGameplayTag LandEventTag;
+	UPROPERTY(EditDefaultsOnly, Category = "GameplayAbility")
+	TSubclassOf<class UGameplayAbility> JumpAbilityClass;
+	UPROPERTY(EditDefaultsOnly, Category = "GameplayAbility")
+	TSubclassOf<class UGameplayAbility> DoubleJumpAbilityClass;
+
+	virtual void GiveUniqueAbilities();
+
 
 public:	
 	// Called every frame
@@ -52,6 +66,8 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, Category = "GameplayAbility")
 	TArray <TSubclassOf<class UGameplayEffect>> InitialEffects;
+
+	virtual void Landed(const FHitResult& Hit) override;
 
 
 

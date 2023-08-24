@@ -35,7 +35,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		EnhancedInputComponent->BindAction(AbilityAction, ETriggerEvent::Triggered, this, &APlayerCharacter::HandleAbilityInput);
 		EnhancedInputComponent->BindAction(LockOnAction, ETriggerEvent::Triggered, this, &APlayerCharacter::LockOn);
 		EnhancedInputComponent->BindAction(ToggleLockOnAction, ETriggerEvent::Triggered, this, &APlayerCharacter::LockOnToggle);
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Jump);
+		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &APlayerCharacter::SendJumpEventsToActorAbility);
 		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Interact);
 
 	}
@@ -54,6 +54,7 @@ void APlayerCharacter::BeginPlay()
 			Subsystem->AddMappingContext(MappingContext, 0);
 		}
 	}
+	GiveUniqueAbilities();
 }
 
 void APlayerCharacter::Tick(float DeltaTime)
@@ -246,6 +247,15 @@ void APlayerCharacter::SpawnWeapons()
 	FAttachmentTransformRules AttachRules{ EAttachmentRule::SnapToTarget, EAttachmentRule::SnapToTarget, EAttachmentRule::KeepWorld, true };
 	Revolver->AttachToComponent(GetMesh(), AttachRules, Revolver->GetWeaponSocketName());
 }
+
+void APlayerCharacter::GiveUniqueAbilities()
+{
+	Super::GiveUniqueAbilities();
+	GiveAbility(DoubleJumpAbilityClass);
+}
+
+
+
 
 AActor* APlayerCharacter::GetClosestTarget(TArray<AActor*> Targets, float& Distance)
 {

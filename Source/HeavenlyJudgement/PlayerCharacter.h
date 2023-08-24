@@ -62,6 +62,7 @@ protected:
 private:
 
 	void SpawnWeapons();
+	virtual void GiveUniqueAbilities() override;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Player")
 	class UInventoryComponent* InventoryComp;

@@ -3,6 +3,8 @@
 
 #include "BaseCharacter.h"
 #include "HJAbilitySystemComponent.h"
+#include "AbilitySystemBlueprintLibrary.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "HJAttributeSet.h"
 
 // Sets default values
@@ -49,6 +51,26 @@ FGameplayAbilitySpec* ABaseCharacter::GiveAbility(const TSubclassOf<class UGamep
 	FGameplayAbilitySpec* spec = AbilitySystemComp->FindAbilitySpecFromHandle(specHandle);
 	return spec;
 }
+void ABaseCharacter::GiveUniqueAbilities()
+{
+	GiveAbility(JumpAbilityClass);
+}
+
+void ABaseCharacter::SendJumpEventsToActorAbility()
+{
+	if (!GetCharacterMovement()->IsFalling())
+	{
+		GetAbilitySystemComponent()->TryActivateAbilityByClass(JumpAbilityClass, true);
+	}
+	else
+	{
+		if (DoubleJumpAbilityClass)
+		{
+			GetAbilitySystemComponent()->TryActivateAbilityByClass(DoubleJumpAbilityClass, true);
+
+		}
+	}
+}
 
 // Called every frame
 void ABaseCharacter::Tick(float DeltaTime)
@@ -73,5 +95,10 @@ void ABaseCharacter::ApplyInitialEffect()
 			ApplyEffectToSelf(effect);
 		}
 	}
+}
+
+void ABaseCharacter::Landed(const FHitResult& Hit)
+{
+	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(this, LandEventTag, FGameplayEventData());
 }
 
