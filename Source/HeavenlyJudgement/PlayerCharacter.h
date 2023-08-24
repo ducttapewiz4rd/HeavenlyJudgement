@@ -30,6 +30,10 @@ public:
 
 	class UInventoryComponent* GetInventoryComponent() const { return InventoryComp; }
 
+	void SetPlayerHasKey(bool HasKey);
+
+	bool PlayerHasKey() const { return bHasKey; }
+
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	class UInputMappingContext* MappingContext;
@@ -88,6 +92,8 @@ private:
 	AActor* GetClosestTarget(TArray<AActor*> Targets, float& Distance);
 	UPROPERTY()
 	class AHJPlayerController* PlayerCont;
+
+	bool bHasKey = false;
 
 
 	

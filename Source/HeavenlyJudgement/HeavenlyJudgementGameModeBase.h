@@ -6,6 +6,7 @@
 #include "GameFramework/GameModeBase.h"
 #include "HeavenlyJudgementGameModeBase.generated.h"
 
+
 /**
  * 
  */
@@ -16,6 +17,7 @@ class HEAVENLYJUDGEMENT_API AHeavenlyJudgementGameModeBase : public AGameModeBas
 
 public:
 	void AddChest(class AChest* ChestToAdd);
+
 
 protected:
 	virtual void BeginPlay() override;

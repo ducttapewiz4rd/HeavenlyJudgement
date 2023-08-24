@@ -76,6 +76,11 @@ bool APlayerCharacter::IsLockedOn(AActor*& LockedOnActor)
 	return false;
 }
 
+void APlayerCharacter::SetPlayerHasKey(bool HasKey)
+{
+	bHasKey = HasKey;
+}
+
 void APlayerCharacter::Move(const FInputActionValue& Value)
 {
 	const FVector2D CurrentValue = Value.Get<FVector2D>();

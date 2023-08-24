@@ -63,7 +63,8 @@ FActiveGameplayEffectHandle UInventoryComponent::ApplyGameplayEffectToOwner(TSub
 {
 	if (effectToApply)
 	{
-		FGameplayEffectSpecHandle spec = OwnerAbilitySystemComp->MakeOutgoingSpec(effectToApply, 1, OwnerAbilitySystemComp->MakeEffectContext());
+		FGameplayEffectSpecHandle spec = OwnerAbilitySystemComp->MakeOutgoingSpec(effectToApply, 1, 
+			OwnerAbilitySystemComp->MakeEffectContext());
 		return OwnerAbilitySystemComp->ApplyGameplayEffectSpecToSelf(*spec.Data);
 	}
 	return FActiveGameplayEffectHandle();

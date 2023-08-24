@@ -13,6 +13,11 @@ void AChest::SetContainedItem(TSubclassOf<class UBaseItem> Item)
 	ContainedItem = Item;
 }
 
+void AChest::SetChosenChest(bool IsIt)
+{
+	bChosenChest = IsIt;
+}
+
 void AChest::BeginPlay()
 {
 	Super::BeginPlay();
@@ -28,6 +33,10 @@ void AChest::InteractWith(APlayerCharacter* Player)
 		if (InventoryComp)
 		{
 			InventoryComp->GiveItem(ContainedItem.GetDefaultObject());
+			if (bChosenChest)
+			{
+				Player->SetPlayerHasKey(true);
+			}
 		}
 	}
 }

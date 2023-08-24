@@ -23,6 +23,7 @@ void AHeavenlyJudgementGameModeBase::SelectRandomChestToGiveKey()
 		UE_LOG(LogTemp, Warning, TEXT("%s would get the key added to its items"), *ChestsInLevel[randomNum]->GetName());
 		AChest* TheChosenOne = ChestsInLevel[randomNum];
 		TheChosenOne->SetContainedItem(Key);
+		TheChosenOne->SetChosenChest(true);
 	}
 	else
 	{

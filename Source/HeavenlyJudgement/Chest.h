@@ -16,7 +16,7 @@ class HEAVENLYJUDGEMENT_API AChest : public AInteractableActor
 
 public:
 	void SetContainedItem(TSubclassOf<class UBaseItem> Item);
-
+	void SetChosenChest(bool IsIt);
 protected:
 	virtual void BeginPlay() override;
 
@@ -30,6 +30,8 @@ private:
 
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<UBaseItem> ContainedItem;
+
+	bool bChosenChest = false;
 
 	
 };
