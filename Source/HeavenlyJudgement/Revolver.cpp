@@ -8,14 +8,19 @@
 void ARevolver::GunTrace()
 {
 
-	const FVector TraceStart = GetWeaponMesh()->GetSocketLocation(PistolMuzzleLocationSocketName);
-	const FVector TraceDir = GetWeaponMesh()->GetSocketRotation(PistolMuzzleLocationSocketName).Vector();
+	FVector CameraLocation;
+	FRotator CameraRotation;
+	APlayerController* PlayerController = Cast<APlayerController>(GetOwner()->GetOwner());
+	PlayerController ->GetPlayerViewPoint(CameraLocation, CameraRotation);
 
+	FVector TraceStart = GetWeaponMesh()->GetSocketLocation(PistolMuzzleLocationSocketName);
+	FVector TraceDir = CameraRotation.Vector();
 
-	GetWorld()->LineTraceSingleByChannel(HitResult, TraceStart, TraceStart + TraceDir * 10000, ECC_Visibility);
+	FVector TraceEnd = TraceStart + TraceDir * 10000;
 
+	// Perform the line trace
+	GetWorld()->LineTraceSingleByChannel(HitResult, TraceStart, TraceEnd, ECC_Visibility);
 
-	
 
 	if (HitResult.bBlockingHit)
 	{

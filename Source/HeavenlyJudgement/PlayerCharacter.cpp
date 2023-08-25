@@ -244,6 +244,7 @@ void APlayerCharacter::SpawnWeapons()
 	SpawnParams.Owner = this;
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 	Revolver = GetWorld()->SpawnActor<ARevolver>(RevolverClass, SpawnParams);
+	Revolver->SetOwner(this);
 	FAttachmentTransformRules AttachRules{ EAttachmentRule::SnapToTarget, EAttachmentRule::SnapToTarget, EAttachmentRule::KeepWorld, true };
 	Revolver->AttachToComponent(GetMesh(), AttachRules, Revolver->GetWeaponSocketName());
 }
