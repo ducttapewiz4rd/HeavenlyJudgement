@@ -27,6 +27,13 @@ public:
 protected:
 	virtual bool CommitAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, OUT FGameplayTagContainer* OptionalRelevantTags = nullptr) override;
 
+
+	//~~~~~Status Effects~~~~~//
+	UPROPERTY(EditDefaultsOnly, Category = "Status Granting Effects")
+	TSubclassOf<UGameplayEffect> BlockEffect;
+	UPROPERTY(EditDefaultsOnly, Category = "Status Granting Effects")
+	TSubclassOf<UGameplayEffect> RemoveBlockStatusEffect;
+
 private:
 	class ABaseCharacter* AvatarCharacterBase;
 

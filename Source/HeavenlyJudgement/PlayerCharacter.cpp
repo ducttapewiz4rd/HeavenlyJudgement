@@ -103,7 +103,7 @@ void APlayerCharacter::Look(const FInputActionValue& Value)
 	else
 	{
 		AddControllerYawInput(CurrentValue.X);
-		AddControllerPitchInput(CurrentValue.Y);
+		AddControllerPitchInput(-CurrentValue.Y);
 	}
 
 }

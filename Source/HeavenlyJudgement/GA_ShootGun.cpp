@@ -75,10 +75,5 @@ void UGA_ShootGun::Hit(FGameplayEventData Payload)
 	{
 
 
-		/*	ACharacter* TargetAsCharacter = Cast<ACharacter>(TargetActor);
-			if (TargetAsCharacter)
-			{
-
-			}*/
 	}
 }
