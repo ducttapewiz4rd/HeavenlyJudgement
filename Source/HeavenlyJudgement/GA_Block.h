@@ -28,6 +28,9 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Block")
 	FGameplayTag BlockEventTag;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Block")
+	float BlockForce = 400.f;
+
 	UFUNCTION()
 	void EnableBlockStatus(FGameplayEventData Data);
 
@@ -36,4 +39,5 @@ private:
 
 	UFUNCTION()
 	void PlayerIsBlocking(FGameplayEventData Data);
+	APlayerController* Controller;
 };
