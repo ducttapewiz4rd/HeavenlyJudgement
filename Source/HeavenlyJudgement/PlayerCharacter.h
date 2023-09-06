@@ -7,6 +7,16 @@
 #include "InputActionValue.h"
 #include "PlayerCharacter.generated.h"
 
+UENUM()
+enum CombatModeState
+{
+	Default UMETA(DisplayName = "Default"),
+	Sword UMETA(DisplayName = "Sword"),
+	Gun UMETA(DisplayName = "Gun"),
+	Magic UMETA(DisplayName = "Magic"),
+	Item UMETA(DisplayName = "Item")
+};
+
 /**
  * 
  */
@@ -17,6 +27,9 @@ class HEAVENLYJUDGEMENT_API APlayerCharacter : public ABaseCharacter
 
 public:
 	APlayerCharacter();
+
+	UPROPERTY(EditAnywhere, Category = "Combat Mode")
+	TEnumAsByte<CombatModeState> CurrentCombatMode;
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
@@ -95,6 +108,8 @@ private:
 	class AHJPlayerController* PlayerCont;
 
 	bool bHasKey = false;
+
+	void SwitchCurrentCombatMode();
 
 
 	
