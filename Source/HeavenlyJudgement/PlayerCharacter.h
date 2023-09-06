@@ -47,6 +47,8 @@ public:
 
 	bool PlayerHasKey() const { return bHasKey; }
 
+	void SwitchCurrentCombatMode();
+
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	class UInputMappingContext* MappingContext;
@@ -109,7 +111,7 @@ private:
 
 	bool bHasKey = false;
 
-	void SwitchCurrentCombatMode();
+	
 
 
 	

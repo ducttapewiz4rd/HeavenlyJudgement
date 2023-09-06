@@ -16,6 +16,7 @@ enum class EAbilityInputID : uint8
 	Melee,
 	Shoot,
 	Dash,
-	Block
+	Block,
+	ToggleMode
 
 };

@@ -278,16 +278,15 @@ AActor* APlayerCharacter::GetClosestTarget(TArray<AActor*> Targets, float& Dista
 
 void APlayerCharacter::SwitchCurrentCombatMode()
 {
-	int32 NextState = static_cast<int32>(CurrentCombatMode) + 1;
 
-	if (NextState >= static_cast<int32>(CombatModeState::))
+	if (CurrentCombatMode == CombatModeState::Item)
 	{
 		CurrentCombatMode = CombatModeState::Default;
+		return;
 	}
-	else
-	{
-		CurrentCombatMode = static_cast<CombatModeState>(NextState);
-	}
+
+	int32 NextState = static_cast<int32>(CurrentCombatMode) + 1;
+	CurrentCombatMode = static_cast<CombatModeState>(NextState);
 }
 
 
