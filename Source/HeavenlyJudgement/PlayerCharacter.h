@@ -28,7 +28,6 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 
-	class ARevolver* GetRevolver() const { return Revolver; }
 
 	bool IsLockedOn(AActor*& LockedOnActor);
 
@@ -75,6 +74,12 @@ protected:
 
 private:
 
+	UPROPERTY(EditDefaultsOnly, Category = "GameplayAbility")
+	TSubclassOf<class UGameplayAbility> LightAttackAbility;
+	UPROPERTY(EditDefaultsOnly, Category = "GameplayAbility")
+	FGameplayTag NextAttackTag;
+
+
 	void SpawnWeapons();
 	virtual void GiveUniqueAbilities() override;
 
@@ -87,12 +92,6 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Player")
 	class UCameraComponent* Camera;
 	
-	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
-	TSubclassOf<class ARevolver> RevolverClass;
-
-	UPROPERTY()
-	ARevolver* Revolver;
-
 	UPROPERTY(VisibleAnywhere)
 	AActor* LockedOnTarget;
 

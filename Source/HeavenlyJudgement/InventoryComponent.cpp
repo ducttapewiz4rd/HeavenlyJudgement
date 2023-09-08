@@ -3,6 +3,8 @@
 
 #include "InventoryComponent.h"
 #include "BaseItem.h"
+#include "BaseCharacter.h"
+#include "Sword.h"
 #include "AbilitySystemComponent.h"
 #include "AbilitySystemBlueprintLibrary.h"
 
@@ -22,6 +24,7 @@ void UInventoryComponent::BeginPlay()
 {
 	Super::BeginPlay();
 	OwnerAbilitySystemComp = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetOwner());
+	SpawnWeapons();
 	// ...
 	
 }
@@ -68,5 +71,15 @@ FActiveGameplayEffectHandle UInventoryComponent::ApplyGameplayEffectToOwner(TSub
 		return OwnerAbilitySystemComp->ApplyGameplayEffectSpecToSelf(*spec.Data);
 	}
 	return FActiveGameplayEffectHandle();
+}
+
+void UInventoryComponent::SpawnWeapons()
+{
+	if (SwordClass)
+	{
+		Sword = GetWorld()->SpawnActor<ASword>(SwordClass);
+		Sword->SetOwner(GetOwner());
+		Sword->AttachToOwner(Cast<ABaseCharacter>(GetOwner())->GetMesh());
+	}
 }
 

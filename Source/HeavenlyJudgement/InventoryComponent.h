@@ -41,4 +41,11 @@ private:
 	FActiveGameplayEffectHandle ApplyItemPassiveEffect(const UBaseItem* itemCDO) const;
 
 	FActiveGameplayEffectHandle ApplyGameplayEffectToOwner(TSubclassOf<class UGameplayEffect> effectToApply) const;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Weapons")
+	TSubclassOf<class ASword> SwordClass;
+	UPROPERTY()
+	ASword* Sword;
+
+	void SpawnWeapons();
 };

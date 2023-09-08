@@ -4,6 +4,7 @@
 #include "PlayerCharacter.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "HJAbilitySystemBlueprintLibrary.h"
 #include "EnhancedInputComponent.h"
 #include "HJAbilitySystemComponent.h"
 #include "InteractableInterface.h"
@@ -49,7 +50,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	SpawnWeapons();
+	GiveAbility(LightAttackAbility);
 	PlayerCont = Cast<AHJPlayerController>(GetOwner());
 	if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
 	{
@@ -241,23 +242,33 @@ void APlayerCharacter::LeftFaceActionPressed()
 	}
 	else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("This is the normal attack"));
+		FGameplayAbilitySpec* MeleeAbilitySpec = GetAbilitySystemComponent()->FindAbilitySpecFromClass(LightAttackAbility);
+		if (MeleeAbilitySpec->IsActive())
+		{
+			if (LockedOnTarget)
+			{
+				FRotator Rotat = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), LockedOnTarget->GetActorLocation());
+				Rotat.Pitch = 0;
+				SetActorRotation(Rotat);
+			}
+			UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(this, NextAttackTag, FGameplayEventData());
+		}
+		else
+		{
+
+			GetAbilitySystemComponent()->TryActivateAbilityByClass(LightAttackAbility);
+		}
 		
 
 	}
+
+
 
 }
 
 void APlayerCharacter::SpawnWeapons()
 {
 
-	FActorSpawnParameters SpawnParams;
-	SpawnParams.Owner = this;
-	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-	Revolver = GetWorld()->SpawnActor<ARevolver>(RevolverClass, SpawnParams);
-	Revolver->SetOwner(this);
-	FAttachmentTransformRules AttachRules{ EAttachmentRule::SnapToTarget, EAttachmentRule::SnapToTarget, EAttachmentRule::KeepWorld, true };
-	Revolver->AttachToComponent(GetMesh(), AttachRules, Revolver->GetWeaponSocketName());
 }
 
 void APlayerCharacter::GiveUniqueAbilities()

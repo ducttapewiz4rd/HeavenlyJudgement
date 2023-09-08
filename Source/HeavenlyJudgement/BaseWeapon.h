@@ -15,9 +15,9 @@ public:
 	// Sets default values for this actor's properties
 	ABaseWeapon();
 	FName GetWeaponSocketName() const { return WeaponSocketName; }
-	USkeletalMeshComponent* GetWeaponMesh() const { return WeaponMesh; }
+	UStaticMeshComponent* GetWeaponMesh() const { return WeaponMesh; }
 
-
+	void AttachToOwner(USkeletalMeshComponent* OwnerMesh);
 
 
 protected:
@@ -29,10 +29,10 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	
 private:
-UPROPERTY(EditDefaultsOnly, Category = "BaseWeapon")
-USkeletalMeshComponent* WeaponMesh;
+	UPROPERTY(EditDefaultsOnly, Category = "BaseWeapon")
+	UStaticMeshComponent* WeaponMesh;
 
-UPROPERTY(EditDefaultsOnly, Category = "BaseWeapon")
-FName WeaponSocketName;
+	UPROPERTY(EditDefaultsOnly, Category = "BaseWeapon")
+	FName WeaponSocketName;
 
 };

@@ -16,44 +16,44 @@ void UGA_ShootGun::ActivateAbility(const FGameplayAbilitySpecHandle Handle, cons
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 
-	UAbilityTask_PlayMontageAndWait* ShootMontageTask = UAbilityTask_PlayMontageAndWait::CreatePlayMontageAndWaitProxy(this, NAME_None, FiringMontage);
-	Revolver = Cast<APlayerCharacter>(GetAvatarAsCharacter())->GetRevolver();
-	APlayerCharacter* Pam = Cast<APlayerCharacter>(GetAvatarAsCharacter());
+	//UAbilityTask_PlayMontageAndWait* ShootMontageTask = UAbilityTask_PlayMontageAndWait::CreatePlayMontageAndWaitProxy(this, NAME_None, FiringMontage);
+	//Revolver = Cast<APlayerCharacter>(GetAvatarAsCharacter())->GetRevolver();
+	//APlayerCharacter* Pam = Cast<APlayerCharacter>(GetAvatarAsCharacter());
 
-	if (ShootMontageTask)
-	{
-		ShootMontageTask->OnBlendOut.AddDynamic(this, &UGA_ShootGun::K2_EndAbility);
-		ShootMontageTask->OnCancelled.AddDynamic(this, &UGA_ShootGun::K2_EndAbility);
-		ShootMontageTask->OnInterrupted.AddDynamic(this, &UGA_ShootGun::K2_EndAbility);
-		ShootMontageTask->OnCompleted.AddDynamic(this, &UGA_ShootGun::K2_EndAbility);
-		ShootMontageTask->ReadyForActivation();
-	}
+	//if (ShootMontageTask)
+	//{
+	//	ShootMontageTask->OnBlendOut.AddDynamic(this, &UGA_ShootGun::K2_EndAbility);
+	//	ShootMontageTask->OnCancelled.AddDynamic(this, &UGA_ShootGun::K2_EndAbility);
+	//	ShootMontageTask->OnInterrupted.AddDynamic(this, &UGA_ShootGun::K2_EndAbility);
+	//	ShootMontageTask->OnCompleted.AddDynamic(this, &UGA_ShootGun::K2_EndAbility);
+	//	ShootMontageTask->ReadyForActivation();
+	//}
 
 
-	UAbilityTask_WaitGameplayEvent* WaitHit = UAbilityTask_WaitGameplayEvent::WaitGameplayEvent(this, HitEventTag, nullptr, false, false);
-	if (WaitHit)
-	{
-		WaitHit->EventReceived.AddDynamic(this, &UGA_ShootGun::Hit);
-		WaitHit->ReadyForActivation();
-	}
+	//UAbilityTask_WaitGameplayEvent* WaitHit = UAbilityTask_WaitGameplayEvent::WaitGameplayEvent(this, HitEventTag, nullptr, false, false);
+	//if (WaitHit)
+	//{
+	//	WaitHit->EventReceived.AddDynamic(this, &UGA_ShootGun::Hit);
+	//	WaitHit->ReadyForActivation();
+	//}
 
-	AActor* Target;
-	if (Pam->IsLockedOn(Target))
-	{
-		if (Target)
-		{
-			FRotator LookAtRot = UKismetMathLibrary::FindLookAtRotation(Pam->GetActorLocation(), Target->GetActorLocation());
-			LookAtRot.Pitch = 0;
-			Pam->SetActorRotation(LookAtRot);
-			Revolver->GunTraceTarget(Target);
+	//AActor* Target;
+	//if (Pam->IsLockedOn(Target))
+	//{
+	//	if (Target)
+	//	{
+	//		FRotator LookAtRot = UKismetMathLibrary::FindLookAtRotation(Pam->GetActorLocation(), Target->GetActorLocation());
+	//		LookAtRot.Pitch = 0;
+	//		Pam->SetActorRotation(LookAtRot);
+	//		Revolver->GunTraceTarget(Target);
 
-		}
-	}
-	else
-	{
-		
-		Revolver->GunTrace();
-	}
+	//	}
+	//}
+	//else
+	//{
+	//	
+	//	Revolver->GunTrace();
+	//}
 
 	
 
