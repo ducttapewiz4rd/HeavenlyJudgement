@@ -15,6 +15,7 @@
 #include "Components/InputComponent.h"
 #include "Camera/CameraComponent.h"
 #include "InventoryComponent.h"
+#include "AbilityStateComponent.h"
 
 APlayerCharacter::APlayerCharacter()
 {
@@ -23,6 +24,7 @@ APlayerCharacter::APlayerCharacter()
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(SpringArm);
 	InventoryComp = CreateDefaultSubobject<UInventoryComponent>(TEXT("Inventory Component"));
+	AbilityStateComponent = CreateDefaultSubobject<UAbilityStateComponent>(TEXT("AbilityStateComponent"));
 }
 
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -37,6 +39,9 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		EnhancedInputComponent->BindAction(ToggleLockOnAction, ETriggerEvent::Triggered, this, &APlayerCharacter::LockOnToggle);
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &APlayerCharacter::SendJumpEventsToActorAbility);
 		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Interact);
+		EnhancedInputComponent->BindAction(ReadyAbilityAction, ETriggerEvent::Completed, this, &APlayerCharacter::ReadyAbilityReleased);
+		EnhancedInputComponent->BindAction(ReadyAbilityAction, ETriggerEvent::Triggered, this, &APlayerCharacter::ReadyAbility);
+		EnhancedInputComponent->BindAction(LeftFaceAction, ETriggerEvent::Triggered, this, &APlayerCharacter::LeftFaceActionPressed);
 
 	}
 }
@@ -118,8 +123,6 @@ void APlayerCharacter::LockOn()
 
 	if (LockedOnTarget)
 	{
-		//UWidgetComponent* WidgetCpt = LockedOnTarget->FindComponentByClass<UWidgetComponent>();
-		//WidgetCpt->SetVisibility(false);
 		LockedOnTarget = nullptr;
 		return;
 	}
@@ -133,19 +136,8 @@ void APlayerCharacter::LockOn()
 	if (PotentialTargets.Num() > 0)
 	{
 		float Distance = 0;
-		// if (LockedOnTarget)
-		// {
-		// 	UWidgetComponent* WidgetCpt = LockedOnTarget->FindComponentByClass<UWidgetComponent>();
-		// 	WidgetCpt->SetVisibility(false);
-		// }
 		LockedOnTarget = GetClosestTarget(PotentialTargets, Distance);
 
-
-		// UWidgetComponent* WidgetCpt = LockedOnTarget->FindComponentByClass<UWidgetComponent>();
-		// if (WidgetCpt)
-		// {
-		// 	WidgetCpt->SetVisibility(true);
-		// }
 	}
 	else
 	{
@@ -202,17 +194,8 @@ void APlayerCharacter::LockOnToggle(const FInputActionValue& Value)
 		if (BestEnemy != nullptr)
 		{
 
-			//if (LockedOnTarget)
-			//{
-			//	UWidgetComponent* WidgetCpt = LockedOnTarget->FindComponentByClass<UWidgetComponent>();
-			//	WidgetCpt->SetVisibility(false);
-			//}
 			LockedOnTarget = BestEnemy;
-			//UWidgetComponent* WidgetCpt = LockedOnTarget->FindComponentByClass<UWidgetComponent>();
-			//if (WidgetCpt)
-			//{
-			//	WidgetCpt->SetVisibility(true);
-			//}
+
 		}
 	}
 }
@@ -234,6 +217,34 @@ void APlayerCharacter::Interact()
 		interactInferface->InteractWith(this);
 	}
 
+
+}
+
+void APlayerCharacter::ReadyAbility()
+{
+	bPressingAbilityReadyInput = true;
+}
+
+void APlayerCharacter::ReadyAbilityReleased()
+{
+	bPressingAbilityReadyInput = false;
+
+}
+
+void APlayerCharacter::LeftFaceActionPressed()
+{
+	if (bPressingAbilityReadyInput)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Use Trigger Ability"));
+		FAbilityStruct CurrentStateAbility = AbilityStateComponent->GetAbilitiesForState();
+		GetAbilitySystemComponent()->TryActivateAbilityByClass(CurrentStateAbility.LeftFaceAbility);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("This is the normal attack"));
+		
+
+	}
 
 }
 
@@ -276,17 +287,5 @@ AActor* APlayerCharacter::GetClosestTarget(TArray<AActor*> Targets, float& Dista
 	return ClosestTarget;
 }
 
-void APlayerCharacter::SwitchCurrentCombatMode()
-{
-
-	if (CurrentCombatMode == CombatModeState::Item)
-	{
-		CurrentCombatMode = CombatModeState::Default;
-		return;
-	}
-
-	int32 NextState = static_cast<int32>(CurrentCombatMode) + 1;
-	CurrentCombatMode = static_cast<CombatModeState>(NextState);
-}
 
 

@@ -14,8 +14,8 @@ void UGA_Block::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const F
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 	UAbilityTask_PlayMontageAndWait* BlockMontageTask = UAbilityTask_PlayMontageAndWait::CreatePlayMontageAndWaitProxy(this, NAME_None, BlockMontage);
 	GetAvatarAsCharacter()->GetCharacterMovement()->StopMovementImmediately();
-	APlayerController* PC = GetAvatarAsCharacter()->GetController<APlayerController>();
-	GetAvatarAsCharacter()->DisableInput(PC);
+	//APlayerController* PC = GetAvatarAsCharacter()->GetController<APlayerController>();
+	//GetAvatarAsCharacter()->DisableInput(PC);
 	if (BlockMontageTask)
 	{
 		BlockMontageTask->OnBlendOut.AddDynamic(this, &UGA_Block::K2_EndAbility);

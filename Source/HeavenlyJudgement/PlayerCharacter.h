@@ -7,15 +7,7 @@
 #include "InputActionValue.h"
 #include "PlayerCharacter.generated.h"
 
-UENUM()
-enum CombatModeState
-{
-	Default UMETA(DisplayName = "Default"),
-	Sword UMETA(DisplayName = "Sword"),
-	Gun UMETA(DisplayName = "Gun"),
-	Magic UMETA(DisplayName = "Magic"),
-	Item UMETA(DisplayName = "Item")
-};
+
 
 /**
  * 
@@ -28,8 +20,7 @@ class HEAVENLYJUDGEMENT_API APlayerCharacter : public ABaseCharacter
 public:
 	APlayerCharacter();
 
-	UPROPERTY(EditAnywhere, Category = "Combat Mode")
-	TEnumAsByte<CombatModeState> CurrentCombatMode;
+	class UAbilityStateComponent* GetAbilityStateComponent() const { return AbilityStateComponent; }
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
@@ -47,7 +38,7 @@ public:
 
 	bool PlayerHasKey() const { return bHasKey; }
 
-	void SwitchCurrentCombatMode();
+	
 
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
@@ -66,6 +57,10 @@ protected:
 	class UInputAction* JumpAction;
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	class UInputAction* InteractAction;
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	class UInputAction* ReadyAbilityAction;
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	class UInputAction* LeftFaceAction;
 
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
@@ -73,6 +68,10 @@ protected:
 	void LockOn();
 	void LockOnToggle(const FInputActionValue& Value);
 	void Interact();
+	void ReadyAbility();
+	void ReadyAbilityReleased();
+	void LeftFaceActionPressed();
+
 
 private:
 
@@ -111,7 +110,11 @@ private:
 
 	bool bHasKey = false;
 
-	
+	UPROPERTY(EditDefaultsOnly)
+	class UAbilityStateComponent* AbilityStateComponent;
+
+	UPROPERTY(VisibleAnywhere)
+	bool bPressingAbilityReadyInput = false;
 
 
 	

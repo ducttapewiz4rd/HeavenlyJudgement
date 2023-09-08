@@ -13,7 +13,7 @@ enum class EAbilityInputID : uint8
 	None,
 	Confirm,
 	Cancel,
-	Melee,
+	Attack,
 	Shoot,
 	Dash,
 	Block,

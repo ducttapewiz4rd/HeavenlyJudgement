@@ -3,12 +3,13 @@
 
 #include "GA_ToggleCombatMode.h"
 #include "PlayerCharacter.h"
+#include "AbilityStateComponent.h"
 
 void UGA_ToggleCombatMode::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData)
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 	APlayerCharacter* Chara = Cast<APlayerCharacter>(GetAvatarAsCharacter());
-	Chara->SwitchCurrentCombatMode();
+	Chara->GetAbilityStateComponent()->SwitchCurrentCombatMode();
 	K2_EndAbility();
 
 }
