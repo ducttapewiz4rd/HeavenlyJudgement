@@ -27,6 +27,12 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Melee")
 	FGameplayTag NextAttackTag;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Melee")
+	FGameplayTag PushCharacterForwardTag;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Melee")
+	float CharacterForwardForce;
+
 	UFUNCTION()
 	void MontageFinished();
 
@@ -36,7 +42,14 @@ private:
 	UFUNCTION()
 	void MoveNextAttack(FGameplayEventData Payload);
 
+	UFUNCTION()
+	void PushCharacter(FGameplayEventData Payload);
 
+	void RotateTowardsInput();
+
+	float OriginalWalkSpeed;
+	float OriginalGroundFriction;
+	FRotator OriginalRotationRate;
 
 	FName NextComboSectionName;
 	
