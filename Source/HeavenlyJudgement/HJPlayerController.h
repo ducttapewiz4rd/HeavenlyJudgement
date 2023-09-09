@@ -13,5 +13,26 @@ UCLASS()
 class HEAVENLYJUDGEMENT_API AHJPlayerController : public APlayerController
 {
 	GENERATED_BODY()
+
+public:
+	virtual void OnPossess(APawn* newPawn) override;
+
+private:
+	UPROPERTY()
+	class APlayerCharacter* Pam;
+
+	UPROPERTY(EditDefaultsOnly, Category = "UI")
+	TSubclassOf<class UInGameUI> InGameUIClass;
+
+	UPROPERTY()
+	UInGameUI* InGameUI;
 	
+	UFUNCTION()
+	void UpdateCombatWidget(struct FAbilityStruct CombatTypeInfo);
+
+	UFUNCTION()
+	void ToggleModeName(FText Name);
+
+	UFUNCTION()
+	void ResetCombatWidget();
 };

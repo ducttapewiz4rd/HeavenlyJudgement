@@ -224,12 +224,13 @@ void APlayerCharacter::Interact()
 void APlayerCharacter::ReadyAbility()
 {
 	bPressingAbilityReadyInput = true;
+	AbilityStateComponent->UpdateCurrentAbilityWidget();
 }
 
 void APlayerCharacter::ReadyAbilityReleased()
 {
 	bPressingAbilityReadyInput = false;
-
+	AbilityStateComponent->ResetWidgetDefaults();
 }
 
 void APlayerCharacter::LeftFaceActionPressed()

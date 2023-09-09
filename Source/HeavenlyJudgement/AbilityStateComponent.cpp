@@ -18,11 +18,13 @@ void UAbilityStateComponent::SwitchCurrentCombatMode()
 	if (CurrentCombatMode == ECombatModeState::Item)
 	{
 		CurrentCombatMode = ECombatModeState::Sword;
+		OnToggleCurrentCombatName.Broadcast(GetAbilitiesForState().ModeName);
 		return;
 	}
 
 	int32 NextState = static_cast<int32>(CurrentCombatMode) + 1;
 	CurrentCombatMode = static_cast<ECombatModeState>(NextState);
+	OnToggleCurrentCombatName.Broadcast(GetAbilitiesForState().ModeName);
 }
 
 
@@ -30,7 +32,7 @@ void UAbilityStateComponent::SwitchCurrentCombatMode()
 void UAbilityStateComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
+	OnToggleCurrentCombatName.Broadcast(GetAbilitiesForState().ModeName);
 	// ...
 	
 }
@@ -55,5 +57,15 @@ FAbilityStruct UAbilityStateComponent::GetAbilitiesForState()
 		}
 	}
 	return FAbilityStruct();
+}
+
+void UAbilityStateComponent::UpdateCurrentAbilityWidget()
+{
+	OnUpdateCombatModeWidget.Broadcast(GetAbilitiesForState());
+}
+
+void UAbilityStateComponent::ResetWidgetDefaults()
+{
+	OnResetDefaults.Broadcast();
 }
 

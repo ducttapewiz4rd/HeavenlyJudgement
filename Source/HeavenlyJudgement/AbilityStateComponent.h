@@ -6,6 +6,7 @@
 #include "Components/ActorComponent.h"
 #include "AbilityStateComponent.generated.h"
 
+
 UENUM()
 enum ECombatModeState
 {
@@ -25,8 +26,20 @@ struct FAbilityStruct
 	TSubclassOf<class UGameplayAbility> TopFaceAbility;
 	UPROPERTY(EditDefaultsOnly, Category = "Ability Struct")
 	TSubclassOf<class UGameplayAbility> RightFaceAbility;
+	UPROPERTY(EditDefaultsOnly, Category = "Ability Struct")
+	FText ModeName;
+	UPROPERTY(EditDefaultsOnly, Category = "Ability Struct")
+	FText LeftName;
+	UPROPERTY(EditDefaultsOnly, Category = "Ability Struct")
+	FText TopName;
+	UPROPERTY(EditDefaultsOnly, Category = "Ability Struct")
+	FText RightName;
 	
 };
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnUpdateCombatModeWidget, FAbilityStruct, CombatModeInfo);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnToggleCurrentCombatName, FText, Name);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnResetDefaults);
+
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -41,6 +54,10 @@ public:
 	TEnumAsByte<ECombatModeState> CurrentCombatMode;
 
 	void SwitchCurrentCombatMode();
+
+	FOnUpdateCombatModeWidget OnUpdateCombatModeWidget;
+	FOnToggleCurrentCombatName OnToggleCurrentCombatName;
+	FOnResetDefaults OnResetDefaults;
 
 protected:
 	// Called when the game starts
@@ -57,5 +74,8 @@ public:
 	TMap<TEnumAsByte<ECombatModeState>, int32> StateToAbilityIndexMap;
 	
 	FAbilityStruct GetAbilitiesForState();
+
+	void UpdateCurrentAbilityWidget();
+	void ResetWidgetDefaults();
 
 };

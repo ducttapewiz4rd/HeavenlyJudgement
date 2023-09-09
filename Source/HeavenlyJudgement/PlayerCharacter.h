@@ -110,7 +110,7 @@ private:
 	bool bHasKey = false;
 
 	UPROPERTY(EditDefaultsOnly)
-	class UAbilityStateComponent* AbilityStateComponent;
+	UAbilityStateComponent* AbilityStateComponent;
 
 	UPROPERTY(VisibleAnywhere)
 	bool bPressingAbilityReadyInput = false;
